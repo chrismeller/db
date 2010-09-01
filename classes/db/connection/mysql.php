@@ -15,8 +15,8 @@
 			// to confirm, but we'll work under that assumption
 			$this->pdo->setAttribute( PDO::ATTR_EMULATE_PREPARES, true );
 			
-			// theoretically this should be the new way to enable the query cache?
-			//$this->pdo->setAttribute( PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, true );
+			// support multiple concurrent unbuffered queries
+			$this->pdo->setAttribute( PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, true );
 			
 			// make sure to set our character sets
 			$this->exec( 'SET NAMES ' . $config['charset'] );
