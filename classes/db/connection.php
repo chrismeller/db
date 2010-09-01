@@ -163,6 +163,27 @@
 			
 		}
 		
+		public function get_column ( $query, $args = array() ) {
+			
+			$statement = $this->query( $query, $args );
+			
+			return $statement->fetchAll( PDO::FETCH_COLUMN );
+			
+		}
+		
+		public function get_value ( $query, $args = array() ) {
+			
+			$result = $this->get_row( $query, $args );
+			
+			if ( $result ) {
+				return array_shift( $result );
+			}
+			else {
+				return false;
+			}
+			
+		}
+		
 		public function last_insert_id ( $sequence_name = '' ) {
 			
 			return $this->pdo->lastInsertId( $sequence_name );
@@ -172,6 +193,18 @@
 		public function table_prefix ( $table_name = '' ) {
 			
 			return $this->table_prefix . $table_name;
+			
+		}
+		
+		public function get_driver_name ( ) {
+			
+			return $this->pdo->getAttribute( PDO::ATTR_DRIVER_NAME );
+			
+		}
+		
+		public function get_driver_version ( ) {
+			
+			return $this->pdo->getAttribute( PDO::ATTR_SERVER_VERSION );
 			
 		}
 		
