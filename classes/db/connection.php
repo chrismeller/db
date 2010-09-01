@@ -173,7 +173,9 @@
 		
 		public function get_value ( $query, $args = array() ) {
 			
-			$result = $this->get_row( $query, $args );
+			$statement = $this->query( $query, $args );
+			
+			$result = $statement->fetch( PDO::FETCH_ASSOC );
 			
 			if ( $result ) {
 				return array_shift( $result );
