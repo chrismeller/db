@@ -1,5 +1,5 @@
 #Description#
-A simple module for Kohana 3.x that provides an easy PDO interface for performing database operations.
+A simple Kohana 3.x module that provides a basic PDO interface, for developers who actually know SQL.
 
 ##Why not use the default modules?##
 First off, performance and security. This is why PDO was introduced. Using prepared statements allows us significantly improved performance for queries that are run multiple times (particularly on RDBMS platforms that natively support them) and bound parameters automatically protect us from SQL Injection. Why are we *still* performing string replacement and escaping on queries? It's slower, more error prone, and totally unnecessary.
