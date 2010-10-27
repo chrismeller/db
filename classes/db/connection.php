@@ -63,6 +63,9 @@
 			
 		}
 		
+		/**
+		 * Disconnect from the database.
+		 */
 		public function disconnect ( ) {
 			
 			$this->pdo = null;
@@ -84,6 +87,12 @@
 			
 		}
 		
+		/**
+		 * Blindly execute a SQL query without bound parameters, etc.
+		 * 
+		 * @param string $query The SQL query to execute.
+		 * @return boolean Whether the query was executed successfully or not.
+		 */
 		public function exec ( $query ) {
 			
 			$query = $this->sql_t( $query );
@@ -121,6 +130,14 @@
 			
 		}
 		
+		/**
+		 * Execute a SQL query, with optional arguments for a prepared statement, and return the statement handle.
+		 * 
+		 * @param string $query The SQL query.
+		 * @param array $args An array of bound parameter values. Depending on the naming of parameter variables it could be associative or not.
+		 * @return PDOStatement The prepared PDOStatement.
+		 * @throws PDOException
+		 */
 		public function query ( $query, $args = array() ) {
 			
 			$query = $this->sql_t( $query );
@@ -213,18 +230,41 @@
 			
 		}
 		
+		/**
+		 * Prefix a table name with the defined table_prefix.
+		 * 
+		 * <code>
+		 * 	$sql = 'select foo from ' . $db->table_prefix('bar') . ' where baz = 1';
+		 * 	// result: select foo from prefix__bar where baz = 1
+		 * </code>
+		 * 
+		 * @param string $table_name Optional table name to add to the prefix.
+		 * @return string The prefix, or a prefixed table name, if one is provided.
+		 */
 		public function table_prefix ( $table_name = '' ) {
 			
 			return $this->table_prefix . $table_name;
 			
 		}
 		
+		/**
+		 * Returns the name of the PDO driver in use.
+		 * 
+		 * If you need to know exactly which type of database you're working against, this is the way.
+		 * 
+		 * @return string 
+		 */
 		public function get_driver_name ( ) {
 			
 			return $this->pdo->getAttribute( PDO::ATTR_DRIVER_NAME );
 			
 		}
 		
+		/**
+		 * Slightly misnamed, returns the version of the DB server in use.
+		 * 
+		 * @return string
+		 */
 		public function get_driver_version ( ) {
 			
 			return $this->pdo->getAttribute( PDO::ATTR_SERVER_VERSION );
