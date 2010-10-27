@@ -88,10 +88,25 @@
 			
 			$query = $this->sql_t( $query );
 			
+			if ( $this->profile ) {
+				$benchmark = Profiler::start('Database (' . $this->pdo . ')', $query);
+			}
+			
 			if ( $this->pdo->exec( $query ) === false ) {
+				
+				// delete the benchmark
+				if ( isset( $benchmark ) ) {
+					Profiler::delete($benchmark);
+				}
+				
 				return false;
 			}
 			else {
+				
+				if ( isset( $benchmark ) ) {
+					Profiler::stop($benchmark);
+				}
+				
 				return true;
 			}
 			
@@ -135,11 +150,17 @@
 				$statement->execute( $args );
 			}
 			catch ( PDOException $e ) {
+				
+				// delete the benchmark
+				if ( isset( $benchmark ) ) {
+					Profiler::delete($benchmark);
+				}
+				
 				throw $e;
 			}
 			
 			if ( isset( $benchmark ) ) {
-				Profiler::delete($benchmark);
+				Profiler::stop($benchmark);
 			}
 			
 			// return the successful statement handle
