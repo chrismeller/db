@@ -3,10 +3,10 @@
 	return array(
 	
 		'default' => array(
-			'dsn' => 'mysql:host=localhost;dbname=uptime',
-			'username' => 'uptime',
-			'password' => 'uptime',
-			'table_prefix' => 'u__',
+			'dsn' => 'mysql:host=localhost;dbname=test',
+			'username' => 'test',
+			'password' => 'test',
+			'table_prefix' => 't__',
 			
 			'charset' => 'utf8',
 			'caching' => false,
@@ -15,10 +15,10 @@
 		),
 		
 		'dev' => array(
-			'dsn' => 'mysql:host=localhost;dbname=uptime',
-			'username' => 'uptime',
-			'password' => 'uptime',
-			'table_prefix' => 'u__',
+			'dsn' => 'mysql:host=localhost;dbname=test',
+			'username' => 'test',
+			'password' => 'test',
+			'table_prefix' => 't__',
 			
 			'charset' => 'utf8',
 			'caching' => false,
