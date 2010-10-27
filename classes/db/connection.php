@@ -11,6 +11,8 @@
 		protected $profile = false;
 		public $table_prefix = '';
 		
+		protected $in_transaction = false;
+		
 		public function __construct ( $environment = 'default', $config = null ) {
 			
 			$this->connect( $environment, $config );
@@ -268,6 +270,67 @@
 		public function get_driver_version ( ) {
 			
 			return $this->pdo->getAttribute( PDO::ATTR_SERVER_VERSION );
+			
+		}
+		
+		/**
+		 * Turns off auto-commit mode. No changes will be committed until you call commit().
+		 * 
+		 * Note that behavior of transactions can vary between database platforms.
+		 * Some operations, like CREATE / DROP table may include an implicit commit on platforms such as MySQL.
+		 * 
+		 * @return boolean True on success, false on failure.
+		 */
+		public function begin_transaction ( ) {
+			
+			// if we're already in a transaction, abort, you can't nest them
+			if ( $this->in_transaction ) {
+				return false;
+			}
+			
+			if ( $this->pdo->beginTransaction() ) {
+				$this->in_transaction = true;
+				return true;
+			}
+			else {
+				return false;
+			}
+			
+		}
+		
+		/**
+		 * Commit all changes from the current transaction and return the connection to auto-commit mode.
+		 * 
+		 * @return boolean True on success, false on failure.
+		 */
+		public function commit ( ) {
+			
+			// you can't commit a non-existent transaction
+			if ( !$this->in_transaction ) {
+				return false;
+			}
+			
+			$this->in_transaction = false;
+			
+			return $this->pdo->commit();
+			
+		}
+		
+		/**
+		 * Rollback all changes from the current transaction and return the connection to auto-commit mode.
+		 * 
+		 * @return boolean True on success, false on failure.
+		 */
+		public function rollback ( ) {
+			
+			// you can't rollback a non-existent transaction
+			if ( !$this->in_transaction ) {
+				return false;
+			}
+			
+			$this->in_transaction = false;
+			
+			return $this->pdo->rollback();
 			
 		}
 		
