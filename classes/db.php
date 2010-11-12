@@ -39,7 +39,7 @@
 			
 		}
 		
-		public static function instance ( $environment = 'default', $config = null ) {
+		public static function instance ( $environment = null, $config = null ) {
 			
 			return DB::factory( $environment, $config );
 			
