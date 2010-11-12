@@ -100,7 +100,7 @@
 			$query = $this->sql_t( $query );
 			
 			if ( $this->profile ) {
-				$benchmark = Profiler::start('Database (' . $this->pdo . ')', $query);
+				$benchmark = Profiler::start('Database (' . $this->get_driver_name() . ')', $query);
 			}
 			
 			if ( $this->pdo->exec( $query ) === false ) {
