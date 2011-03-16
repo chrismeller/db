@@ -15,14 +15,29 @@
 			// to confirm, but we'll work under that assumption
 			$this->pdo->setAttribute( PDO::ATTR_EMULATE_PREPARES, true );
 			
-			// support multiple concurrent unbuffered queries
-			$this->pdo->setAttribute( PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, true );
-			
 			// make sure to set our character sets
 			$this->exec( 'SET NAMES ' . $config['charset'] );
 			$this->exec( 'SET CHARACTER SET ' . $config['charset'] );
 		
 			return true;
+			
+		}
+		
+		/**
+		 * Execute a SQL query, with optional arguments for a prepared statement, and return the statement handle.
+		 * 
+		 * @param string $query The SQL query.
+		 * @param array $args An array of bound parameter values. Depending on the naming of parameter variables it could be associative or not.
+		 * @param array $attribs An array of attributes to hand to PDO::prepare().
+		 * @return PDOStatement The prepared PDOStatement.
+		 * @throws PDOException
+		 */
+		public function query ( $query, $args = array(), $attribs = array() ) {
+			
+			// support multiple concurrent unbuffered queries - we use this so we can actually use transactions
+			$attribs[ PDO::MYSQL_ATTR_USE_BUFFERED_QUERY ] = true;
+			
+			return parent::query( $query, $args, $attribs );
 			
 		}
 		

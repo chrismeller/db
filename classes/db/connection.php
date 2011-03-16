@@ -137,10 +137,11 @@
 		 * 
 		 * @param string $query The SQL query.
 		 * @param array $args An array of bound parameter values. Depending on the naming of parameter variables it could be associative or not.
+		 * @param array $attribs An array of attributes to hand to PDO::prepare().
 		 * @return PDOStatement The prepared PDOStatement.
 		 * @throws PDOException
 		 */
-		public function query ( $query, $args = array() ) {
+		public function query ( $query, $args = array(), $attribs = array() ) {
 			
 			$query = $this->sql_t( $query );
 			
@@ -150,7 +151,7 @@
 			
 			// if we don't have the statement previously prepared, prepare it and store it
 			if ( !isset( $this->statements[ md5( $query ) ] ) ) {
-				$this->statements[ md5( $query ) ] = $this->pdo->prepare( $query );
+				$this->statements[ md5( $query ) ] = $this->pdo->prepare( $query, $attribs );
 			}
 			
 			// now snag it back from the 'cache'
