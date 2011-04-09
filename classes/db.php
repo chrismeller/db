@@ -2,7 +2,7 @@
 
 	class DB {
 		
-		protected $pdo;
+		protected static $instances = array();
 		
 		private function __construct ( $environment = 'default', $config = null ) {
 			
@@ -26,6 +26,11 @@
 				
 			}
 			
+			// if there's already a connection available for this environment, use it
+			if ( isset( self::$instances[ $environment ] ) ) {
+				return self::$instances[ $environment ];
+			}
+			
 			// if they didn't pass in a configuration, load the one we want
 			if ( $config == null ) {
 				$config = Kohana::config( 'db' )->$environment;
@@ -35,7 +40,13 @@
 			
 			$class = 'DB_Connection_' . $engine;
 			
-			return new $class( $environment, $config );
+			// create the instance
+			$instance = new $class( $environment, $config );
+			
+			// save it for later
+			self::$instances[ $environment ] = $instance;
+			
+			return $instance;
 			
 		}
 		
