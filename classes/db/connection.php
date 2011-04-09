@@ -100,7 +100,7 @@
 			$query = $this->sql_t( $query );
 			
 			if ( $this->profile ) {
-				$benchmark = Profiler::start('Database (' . $this->get_driver_name() . ')', $query);
+				$benchmark = Profiler::start('Database', $query);
 			}
 			
 			if ( $this->pdo->exec( $query ) === false ) {
@@ -146,7 +146,7 @@
 			$query = $this->sql_t( $query );
 			
 			if ( $this->profile ) {
-				$benchmark = Profiler::start('Database ({$this->pdo})', $query);
+				$benchmark = Profiler::start('Database', $query);
 			}
 			
 			// if we don't have the statement previously prepared, prepare it and store it
