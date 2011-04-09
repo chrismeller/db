@@ -150,12 +150,14 @@
 			}
 			
 			// if we don't have the statement previously prepared, prepare it and store it
-			if ( !isset( $this->statements[ md5( $query ) ] ) ) {
-				$this->statements[ md5( $query ) ] = $this->pdo->prepare( $query, $attribs );
+			$query_hash = md5( $query . implode( '', array_keys( $attribs ) ) . implode( '', array_values( $attribs ) ) );
+			
+			if ( !isset( $this->statements[ $query_hash ] ) ) {
+				$this->statements[ $query_hash ] = $this->pdo->prepare( $query, $attribs );
 			}
 			
 			// now snag it back from the 'cache'
-			$statement = $this->statements[ md5( $query ) ];
+			$statement = $this->statements[ $query_hash ];
 			
 			if ( $this->fetch_mode == PDO::FETCH_CLASS ) {
 				// we blindly try and fetch as a class right now. if it doesn't already exist, oh well
