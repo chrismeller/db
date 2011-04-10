@@ -13,6 +13,9 @@
 			// support multiple concurrent unbuffered queries - we use this so we can actually use transactions
 			$attrs[ PDO::MYSQL_ATTR_USE_BUFFERED_QUERY ] = true;
 			
+			// per the mysql documentation we only need to set character set (not names): http://dev.mysql.com/doc/refman/5.0/en/charset-connection.html
+			$attrs[ PDO::MYSQL_ATTR_INIT_COMMAND ] = 'SET CHARACTER SET ' . $config['charset'];
+			
 			$benchmark = Profiler::start('Database', 'mysql-connect');
 			
 			try {
@@ -27,10 +30,6 @@
 				throw $e;
 			}
 			
-			// make sure to set our character sets
-			$this->exec( 'SET NAMES ' . $config['charset'] );
-			$this->exec( 'SET CHARACTER SET ' . $config['charset'] );
-		
 			if ( isset($benchmark) ) {
 				Profiler::stop($benchmark);
 			}
