@@ -19,7 +19,7 @@
 			
 		}
 		
-		public function connect ( $environment = 'default', $config = null ) {
+		public function connect ( $environment = 'default', $config = null, $attrs = array() ) {
 			
 			// if they didn't pass in a configuration, load the one we want
 			if ( $config == null ) {
@@ -30,9 +30,7 @@
 				$this->profile = true;
 			}
 			
-			$attrs = array(
-				PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,	// use exceptions, not warnings
-			);
+			$attrs[ PDO::ATTR_ERRMODE ] = PDO::ERRMODE_EXCEPTION;	// use exceptions, not warnings
 			
 			if ( $config['persistent'] == true ) {
 				$attrs[ PDO::ATTR_PERSISTENT ] = true;

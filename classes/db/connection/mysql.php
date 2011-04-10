@@ -2,18 +2,23 @@
 
 	class DB_Connection_MySQL extends DB_Connection {
 		
-		public function connect ( $environment = 'default', $config = null ) {
+		public function connect ( $environment = 'default', $config = null, $attrs = array() ) {
+			
+			// add our mysql-specific values to the connection attributes
+			
+			// according to some sources this is required to enable mysql's query cache... unfortunately it's difficult
+			// to confirm, but we'll work under that assumption
+			$attrs[ PDO::ATTR_EMULATE_PREPARES ] = true;
+			
+			// support multiple concurrent unbuffered queries - we use this so we can actually use transactions
+			$attrs[ PDO::MYSQL_ATTR_USE_BUFFERED_QUERY ] = true;
 			
 			try {
-				parent::connect( $environment, $config );
+				parent::connect( $environment, $config, $attrs );
 			}
 			catch ( PDOException $e ) {
 				throw $e;
 			}
-			
-			// according to some sources this is required to enable mysql's query cache... unfortunately it's difficult
-			// to confirm, but we'll work under that assumption
-			$this->pdo->setAttribute( PDO::ATTR_EMULATE_PREPARES, true );
 			
 			// make sure to set our character sets
 			$this->exec( 'SET NAMES ' . $config['charset'] );
@@ -33,9 +38,6 @@
 		 * @throws PDOException
 		 */
 		public function query ( $query, $args = array(), $attribs = array() ) {
-			
-			// support multiple concurrent unbuffered queries - we use this so we can actually use transactions
-			$attribs[ PDO::MYSQL_ATTR_USE_BUFFERED_QUERY ] = true;
 			
 			return parent::query( $query, $args, $attribs );
 			
