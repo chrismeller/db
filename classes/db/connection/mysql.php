@@ -7,7 +7,7 @@
 			// add our mysql-specific values to the connection attributes
 			
 			// according to some sources this is required to enable mysql's query cache... unfortunately it's difficult
-			// to confirm, but we'll work under that assumption
+			// to confirm, but we'll work under that assumption. a good (if dated) reference: http://wezfurlong.org/blog/2006/apr/using-pdo-mysql/
 			$attrs[ PDO::ATTR_EMULATE_PREPARES ] = true;
 			
 			// support multiple concurrent unbuffered queries - we use this so we can actually use transactions
