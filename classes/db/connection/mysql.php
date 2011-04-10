@@ -13,10 +13,17 @@
 			// support multiple concurrent unbuffered queries - we use this so we can actually use transactions
 			$attrs[ PDO::MYSQL_ATTR_USE_BUFFERED_QUERY ] = true;
 			
+			$benchmark = Profiler::start('Database', 'mysql-connect');
+			
 			try {
 				parent::connect( $environment, $config, $attrs );
 			}
 			catch ( PDOException $e ) {
+				
+				if ( isset($benchmark) ) {
+					Profiler::delete($benchmark);
+				}
+				
 				throw $e;
 			}
 			
@@ -24,6 +31,10 @@
 			$this->exec( 'SET NAMES ' . $config['charset'] );
 			$this->exec( 'SET CHARACTER SET ' . $config['charset'] );
 		
+			if ( isset($benchmark) ) {
+				Profiler::stop($benchmark);
+			}
+			
 			return true;
 			
 		}
