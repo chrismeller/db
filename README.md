@@ -66,3 +66,19 @@ The handful of pre-defined constants are listed in ``system/classes/kohana/core.
 	const DEVELOPMENT = 'development';
 	
 But remember, you can use any string you like and its array will be loaded for Db settings.
+
+###Kohana 3.1 Note###
+As of 3.1, the Kohana environment constants are integers, not strings. That will screw up the naming of your arrays in ``config/db.php``.
+
+To get around this, I've overridden the Kohana class by creating an ``application/kohana.php`` file similar to:
+
+	class Kohana extends Kohana_Core {
+
+		const DEVELOPMENT = 'development';
+		const PRODUCTION = 'production';
+		const STAGING = 'staging';
+		const TESTING = 'testing';
+
+	}
+
+This will get your arrays working properly again. Hopefully they'll change this back in the next release so a hack won't be necessary.
