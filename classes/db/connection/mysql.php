@@ -46,9 +46,11 @@
 		 * @return PDOStatement The prepared PDOStatement.
 		 * @throws PDOException
 		 */
-		public function query ( $query, $args = array(), $attribs = array() ) {
+		public function query ( $query, $args = array(), $fetch_class = null, $attribs = array() ) {
 			
-			return parent::query( $query, $args, $attribs );
+			$attribs[ PDO::MYSQL_ATTR_USE_BUFFERED_QUERY ] = true;
+			
+			return parent::query( $query, $args, $fetch_class, $attribs );
 			
 		}
 		
