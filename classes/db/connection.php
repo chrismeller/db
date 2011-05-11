@@ -139,7 +139,11 @@
 		 * @return PDOStatement The prepared PDOStatement.
 		 * @throws PDOException
 		 */
-		public function query ( $query, $args = array(), $attribs = array() ) {
+		public function query ( $query, $args = array(), $fetch_class = null, $attribs = array() ) {
+			
+			if ( $fetch_class == null ) {
+				$fetch_class = 'stdClass';
+			}
 			
 			$query = $this->sql_t( $query );
 			
@@ -160,7 +164,7 @@
 			if ( $this->fetch_mode == PDO::FETCH_CLASS ) {
 				// we blindly try and fetch as a class right now. if it doesn't already exist, oh well
 				// @todo be nicer about this - habari has some logic for ensuring a class is autoloaded first
-				$statement->setFetchMode( PDO::FETCH_CLASS, $this->fetch_mode_class, array() );
+				$statement->setFetchMode( PDO::FETCH_CLASS, $fetch_class, array() );
 			}
 			else {
 				$statement->setFetchMode( $this->fetch_mode );
@@ -188,25 +192,25 @@
 			
 		}
 		
-		public function get_results ( $query, $args = array() ) {
+		public function get_results ( $query, $args = array(), $class = null ) {
 			
-			$statement = $this->query( $query, $args );
+			$statement = $this->query( $query, $args, $class );
 			
 			return $statement->fetchAll();
 			
 		}
 		
-		public function get_row ( $query, $args = array() ) {
+		public function get_row ( $query, $args = array(), $class = null ) {
 			
-			$statement = $this->query( $query, $args );
+			$statement = $this->query( $query, $args, $class );
 			
 			return $statement->fetch();
 			
 		}
 		
-		public function get_column ( $query, $args = array() ) {
+		public function get_column ( $query, $args = array(), $class = null ) {
 			
-			$statement = $this->query( $query, $args );
+			$statement = $this->query( $query, $args, $class );
 			
 			return $statement->fetchAll( PDO::FETCH_COLUMN );
 			
