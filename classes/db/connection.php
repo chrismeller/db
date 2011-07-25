@@ -36,6 +36,12 @@
 				$attrs[ PDO::ATTR_PERSISTENT ] = true;
 			}
 			
+			// if there is an array of options in the config, merge those in
+			if ( isset( $config['attributes'] ) ) {
+				// note that array_merge screws up numeric keys, which attributes are, but + does not
+				$attrs = $attrs + $config['attributes'];
+			}
+			
 			$this->table_prefix = $config['table_prefix'];
 			
 			try {
