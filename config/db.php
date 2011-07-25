@@ -3,6 +3,7 @@
 	return array(
 	
 		'default' => array(
+			'type' => 'mysql',
 			'dsn' => 'mysql:host=localhost;dbname=test',
 			'username' => 'test',
 			'password' => 'test',
@@ -12,9 +13,12 @@
 			'caching' => false,
 			'profiling' => false,
 			'persistent' => false,
+	
+			'attributes' => array()
 		),
 		
 		'dev' => array(
+			'type' => 'mysql',
 			'dsn' => 'mysql:host=localhost;dbname=test',
 			'username' => 'test',
 			'password' => 'test',
@@ -24,6 +28,8 @@
 			'caching' => false,
 			'profiling' => true,
 			'persistent' => false,
+		
+			'attributes' => array()
 		)
 		
 	);
