@@ -36,9 +36,7 @@
 				$config = Kohana::config( 'db' )->$environment;
 			}
 			
-			list($engine) = explode(':', $config['dsn'], 2);
-			
-			$class = 'DB_Connection_' . $engine;
+			$class = 'DB_Connection_' . $config['type'];
 			
 			// create the instance
 			$instance = new $class( $environment, $config );
