@@ -25,7 +25,10 @@
 			
 			// if they didn't pass in a configuration, load the one we want
 			if ( $config == null ) {
-				$config = Kohana::config( 'db' )->$environment;
+				// load the db config into a group called 'db';
+            	\Fuel\Core\Config::load('db', 'db');
+            	
+            	$config = \Fuel\Core\Config::get( 'db.' . $environment );
 			}
 			
 			if ( isset( $config['profiling'] ) && $config['profiling'] == true ) {
