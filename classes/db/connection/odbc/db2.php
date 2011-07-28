@@ -1,5 +1,7 @@
 <?php
 
+	namespace DB;
+
 	class DB_Connection_ODBC_DB2 extends DB_Connection_ODBC {
 		
 		public function sql_t ( $query ) {
