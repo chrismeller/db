@@ -1,5 +1,7 @@
 <?php
 
+	namespace DB;
+
 	abstract class DB_Connection {
 		
 		protected $pdo;

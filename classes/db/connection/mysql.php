@@ -1,5 +1,7 @@
 <?php
 
+	namespace DB;
+
 	class DB_Connection_MySQL extends DB_Connection {
 		
 		public function connect ( $environment = 'default', $config = null, $attrs = array() ) {

@@ -1,5 +1,7 @@
 <?php
 
+	namespace DB;
+
 	abstract class Model {
 		
 		protected $_db;
