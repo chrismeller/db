@@ -14,12 +14,15 @@
 		
 		public static function factory ( $environment = null, $config = null ) {
 			
+			// load the db config into a group called 'db';
+			\Fuel\Core\Config::load('db', 'db');
+			
 			if ( $environment == null ) {
 				
-				$e = Kohana::$environment;
+				$e = \Fuel\Core\Fuel::$env;
 				
 				// first, see if there's a config value matching our environment
-				if ( Kohana::config( 'db.' . $e ) ) {
+				if ( \Fuel\Core\Config::get( 'db.' . $e ) ) {
 					$environment = $e;
 				}
 				else {
@@ -35,10 +38,10 @@
 			
 			// if they didn't pass in a configuration, load the one we want
 			if ( $config == null ) {
-				$config = Kohana::config( 'db' )->$environment;
+				$config = \Fuel\Core\Config::get( 'db.' . $environment );
 			}
 			
-			$class = 'DB_Connection_' . $config['type'];
+			$class = 'DB\DB_Connection_' . $config['type'];
 			
 			// create the instance
 			$instance = new $class( $environment, $config );
