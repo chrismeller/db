@@ -10,13 +10,13 @@
 			
 			// according to some sources this is required to enable mysql's query cache... unfortunately it's difficult
 			// to confirm, but we'll work under that assumption. a good (if dated) reference: http://wezfurlong.org/blog/2006/apr/using-pdo-mysql/
-			$attrs[ PDO::ATTR_EMULATE_PREPARES ] = true;
+			$attrs[ \PDO::ATTR_EMULATE_PREPARES ] = true;
 			
 			// support multiple concurrent unbuffered queries - we use this so we can actually use transactions
-			$attrs[ PDO::MYSQL_ATTR_USE_BUFFERED_QUERY ] = true;
+			$attrs[ \PDO::MYSQL_ATTR_USE_BUFFERED_QUERY ] = true;
 			
 			if ( $this->profile ) {
-				$benchmark = Profiler::start('Database', 'mysql-connect');
+				$benchmark = \Fuel\Core\Profiler::start('Database', 'mysql-connect');
 			}
 			
 			try {
@@ -24,17 +24,17 @@
 				$this->exec( 'SET CHARACTER SET ' . $config['charset'] );
 				$this->exec( 'SET NAMES ' . $config['charset'] );
 			}
-			catch ( PDOException $e ) {
+			catch ( \PDOException $e ) {
 				
 				if ( isset($benchmark) ) {
-					Profiler::delete($benchmark);
+					\Fuel\Core\Profiler::delete($benchmark);
 				}
 				
 				throw $e;
 			}
 			
 			if ( isset($benchmark) ) {
-				Profiler::stop($benchmark);
+				\Fuel\Core\Profiler::stop($benchmark);
 			}
 			
 			return true;
@@ -52,7 +52,7 @@
 		 */
 		public function query ( $query, $args = array(), $fetch_class = null, $attribs = array() ) {
 			
-			$attribs[ PDO::MYSQL_ATTR_USE_BUFFERED_QUERY ] = true;
+			$attribs[ \PDO::MYSQL_ATTR_USE_BUFFERED_QUERY ] = true;
 			
 			return parent::query( $query, $args, $fetch_class, $attribs );
 			

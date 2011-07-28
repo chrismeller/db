@@ -7,7 +7,7 @@
 		protected $pdo;
 		protected $statements = array();
 		
-		public $fetch_mode = PDO::FETCH_CLASS;
+		public $fetch_mode = \PDO::FETCH_CLASS;
 		public $fetch_mode_class = 'stdClass';
 		
 		protected $profile = false;
@@ -32,16 +32,10 @@
 				$this->profile = true;
 			}
 			
-			$attrs[ PDO::ATTR_ERRMODE ] = PDO::ERRMODE_EXCEPTION;	// use exceptions, not warnings
+			$attrs[ \PDO::ATTR_ERRMODE ] = \PDO::ERRMODE_EXCEPTION;	// use exceptions, not warnings
 			
 			if ( $config['persistent'] == true ) {
-				$attrs[ PDO::ATTR_PERSISTENT ] = true;
-			}
-			
-			// if there is an array of options in the config, merge those in
-			if ( isset( $config['attributes'] ) ) {
-				// note that array_merge screws up numeric keys, which attributes are, but + does not
-				$attrs = $attrs + $config['attributes'];
+				$attrs[ \PDO::ATTR_PERSISTENT ] = true;
 			}
 			
 			$this->table_prefix = $config['table_prefix'];
@@ -49,20 +43,20 @@
 			try {
 				
 				if ( $this->profile ) {
-					$benchmark = Profiler::start('Database', 'connect');
+					$benchmark = \Fuel\Core\Profiler::start('Database', 'connect');
 				}
 				
-				$this->pdo = new PDO( $config['dsn'], $config['username'], $config['password'], $attrs );
+				$this->pdo = new \PDO( $config['dsn'], $config['username'], $config['password'], $attrs );
 				
 				if ( isset($benchmark) ) {
-					Profiler::stop($benchmark);
+					\Fuel\Core\Profiler::stop($benchmark);
 				}
 				
 			}
-			catch ( PDOException $e ) {
+			catch ( \PDOException $e ) {
 				
 				if ( isset($benchmark) ) {
-					Profiler::delete($benchmark);
+					\Fuel\Core\Profiler::delete($benchmark);
 				}
 				
 				// just re-throw it - be sure to catch any connection errors in extension classes
@@ -106,14 +100,14 @@
 			$query = $this->sql_t( $query );
 			
 			if ( $this->profile ) {
-				$benchmark = Profiler::start('Database', $query);
+				$benchmark = \Fuel\Core\Profiler::start('Database', $query);
 			}
 			
 			if ( $this->pdo->exec( $query ) === false ) {
 				
 				// delete the benchmark
 				if ( isset( $benchmark ) ) {
-					Profiler::delete($benchmark);
+					\Fuel\Core\Profiler::delete($benchmark);
 				}
 				
 				return false;
@@ -121,7 +115,7 @@
 			else {
 				
 				if ( isset( $benchmark ) ) {
-					Profiler::stop($benchmark);
+					\Fuel\Core\Profiler::stop($benchmark);
 				}
 				
 				return true;
@@ -156,7 +150,7 @@
 			$query = $this->sql_t( $query );
 			
 			if ( $this->profile ) {
-				$benchmark = Profiler::start('Database', $query);
+				$benchmark = \Fuel\Core\Profiler::start('Database', $query);
 			}
 			
 			// if we don't have the statement previously prepared, prepare it and store it
@@ -169,10 +163,10 @@
 			// now snag it back from the 'cache'
 			$statement = $this->statements[ $query_hash ];
 			
-			if ( $this->fetch_mode == PDO::FETCH_CLASS ) {
+			if ( $this->fetch_mode == \PDO::FETCH_CLASS ) {
 				// we blindly try and fetch as a class right now. if it doesn't already exist, oh well
 				// @todo be nicer about this - habari has some logic for ensuring a class is autoloaded first
-				$statement->setFetchMode( PDO::FETCH_CLASS, $fetch_class, array() );
+				$statement->setFetchMode( \PDO::FETCH_CLASS, $fetch_class, array() );
 			}
 			else {
 				$statement->setFetchMode( $this->fetch_mode );
@@ -181,18 +175,18 @@
 			try {
 				$statement->execute( $args );
 			}
-			catch ( PDOException $e ) {
+			catch ( \PDOException $e ) {
 				
 				// delete the benchmark
 				if ( isset( $benchmark ) ) {
-					Profiler::delete($benchmark);
+					\Fuel\Core\Profiler::delete($benchmark);
 				}
 				
 				throw $e;
 			}
 			
 			if ( isset( $benchmark ) ) {
-				Profiler::stop($benchmark);
+				\Fuel\Core\Profiler::stop($benchmark);
 			}
 			
 			// return the successful statement handle
@@ -228,7 +222,7 @@
 			
 			$statement = $this->query( $query, $args );
 			
-			$result = $statement->fetch( PDO::FETCH_ASSOC );
+			$result = $statement->fetch( \PDO::FETCH_ASSOC );
 			
 			if ( $result ) {
 				return array_shift( $result );
@@ -271,7 +265,7 @@
 		 */
 		public function get_driver_name ( ) {
 			
-			return $this->pdo->getAttribute( PDO::ATTR_DRIVER_NAME );
+			return $this->pdo->getAttribute( \PDO::ATTR_DRIVER_NAME );
 			
 		}
 		
@@ -282,7 +276,7 @@
 		 */
 		public function get_driver_version ( ) {
 			
-			return $this->pdo->getAttribute( PDO::ATTR_SERVER_VERSION );
+			return $this->pdo->getAttribute( \PDO::ATTR_SERVER_VERSION );
 			
 		}
 		
