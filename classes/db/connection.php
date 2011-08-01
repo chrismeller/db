@@ -223,7 +223,7 @@
 			
 			$statement = $this->query( $query, $args, $class );
 			
-			return $statement->fetchAll( PDO::FETCH_COLUMN );
+			return $statement->fetchAll( \PDO::FETCH_COLUMN );
 			
 		}
 		
