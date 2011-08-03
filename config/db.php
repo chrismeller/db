@@ -17,7 +17,7 @@
 			'attributes' => array()
 		),
 		
-		'dev' => array(
+		'development' => array(
 			'type' => 'mysql',
 			'dsn' => 'mysql:host=localhost;dbname=test',
 			'username' => 'test',
