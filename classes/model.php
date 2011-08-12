@@ -17,8 +17,14 @@
 		
 		public function __construct ( $db = null ) {
 			
-			// we don't need to handle $db parsing here, it's done in DB::factory().
-			$this->db = DB::instance();
+			// if there was no db object passed in, we need to create a default instance
+			if ( $db == null ) {
+				// we don't need to handle db parsing here, tis' done in DB::factory()
+				$db = DB::instance();
+			}
+			
+			// save the db for the model to access
+			$this->db = $db;
 			
 			// alias for compatibility with kohana... stupid _
 			$this->_db = $this->db;
