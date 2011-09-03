@@ -1,7 +1,7 @@
 #Description#
 A simple Fuel 1.x package that provides a basic PDO interface, for developers who actually know SQL.
 
-##Why not use the default modules?##
+##Why not use the default classes?##
 First and foremost, it lets you use any database server that PDO supports with just a switch of the DSN in your config file. Even the default Fuel PDO driver contains MySQL-specific code (see the set_charset method).
 
 Secondly, performance and security. This is why PDO was introduced. Using prepared statements allows us significantly improved performance for queries that are run multiple times (particularly on RDBMS platforms that natively support them) and bound parameters automatically protect us from SQL Injection. Why are we *still* performing string replacement and escaping on queries? It's slower, more error prone, and totally unnecessary.
