@@ -17,7 +17,7 @@
 				$e = Kohana::$environment;
 				
 				// first, see if there's a config value matching our environment
-				if ( Kohana::config( 'db.' . $e ) ) {
+				if ( Kohana::$config->load( 'db.' . $e ) ) {
 					$environment = $e;
 				}
 				else {
@@ -33,7 +33,7 @@
 			
 			// if they didn't pass in a configuration, load the one we want
 			if ( $config == null ) {
-				$config = Kohana::config( 'db' )->$environment;
+				$config = Kohana::$config->load( 'db' )->$environment;
 			}
 			
 			$class = 'DB_Connection_' . $config['type'];
