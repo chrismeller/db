@@ -203,6 +203,46 @@
 			
 		}
 		
+		public function prepare ( $query, $fetch_class = null, $attribs = array() ) {
+			
+			if ( $fetch_class == null ) {
+				$fetch_class = 'stdClass';
+			}
+			
+			$query = $this->sql_t( $query );
+			
+			if ( $this->profile ) {
+				$benchmark = \Fuel\Core\Profiler::start('Database', $query);
+			}
+			
+			// if we don't have the statement previously prepared, prepare it and store it
+			$query_hash = md5( $query . implode( '', array_keys( $attribs ) ) . implode( '', array_values( $attribs ) ) );
+			
+			if ( !isset( $this->statements[ $query_hash ] ) ) {
+				$this->statements[ $query_hash ] = $this->pdo->prepare( $query, $attribs );
+			}
+			
+			// now snag it back from the 'cache'
+			$statement = $this->statements[ $query_hash ];
+			
+			if ( $this->fetch_mode == \PDO::FETCH_CLASS ) {
+				// we blindly try and fetch as a class right now. if it doesn't already exist, oh well
+				// @todo be nicer about this - habari has some logic for ensuring a class is autoloaded first
+				$statement->setFetchMode( \PDO::FETCH_CLASS, $fetch_class, array() );
+			}
+			else {
+				$statement->setFetchMode( $this->fetch_mode );
+			}
+			
+			if ( isset( $benchmark ) ) {
+				\Fuel\Core\Profiler::stop($benchmark);
+			}
+			
+			// return the successful statement handle
+			return $statement;
+			
+		}
+		
 		public function get_results ( $query, $args = array(), $class = null ) {
 			
 			$statement = $this->query( $query, $args, $class );
