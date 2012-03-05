@@ -11,6 +11,8 @@
 			
 			// if there's no offset, it's a simple replace
 			$query = preg_replace( '/LIMIT\s+(\d+)/ims', 'FETCH FIRST ${1} ROWS ONLY', $query );
+
+			$query = parent::sql_t( $query );
 			
 			return $query;
 			

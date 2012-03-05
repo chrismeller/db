@@ -12,6 +12,8 @@
 		
 		protected $profile = false;
 		public $table_prefix = '';
+
+		protected $tables = array();
 		
 		protected $in_transaction = false;
 		
@@ -94,8 +96,28 @@
 		 */
 		public function sql_t ( $query ) {
 			
+			// replace any registered table names in the query
+			$replace = array();
+			foreach ( $this->tables as $table ) {
+				$replace[ '{' . $table . '}' ] = $this->table_prefix( $table );
+			}
+
+			$query = str_replace( array_keys( $replace ), array_values( $replace ), $query );
+			
 			return $query;
 			
+		}
+
+		public function register_table ( $table ) {
+
+			if ( is_array( $table ) ) {
+				foreach ( $table as $t ) {
+					$this->register_table( $t );
+				}
+			}
+			
+			$this->tables[ $table ] = $table;
+
 		}
 		
 		/**
