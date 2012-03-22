@@ -21,7 +21,7 @@
 		public function replace_offset ( $matches ) {
 			
 			$start = $matches[2];
-			$stop = $start + $matches[3];
+			$stop = $start + $matches[3] - 1;
 			
 			$query = 'select * from ( select OFFSET_TEMP1.*, rownumber() OVER() as ROW_NUM FROM ( ' . $matches[1] . ' ) AS OFFSET_TEMP1 ) AS OFFSET_TEMP2 where ROW_NUM between ' . $start . ' and ' . $stop;
 			
