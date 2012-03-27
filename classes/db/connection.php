@@ -98,8 +98,8 @@
 			
 			// replace any registered table names in the query
 			$replace = array();
-			foreach ( $this->tables as $table ) {
-				$replace[ '{' . $table . '}' ] = $this->table_prefix( $table );
+			foreach ( $this->tables as $alias => $table ) {
+				$replace[ '{' . $alias . '}' ] = $this->table_prefix( $table );
 			}
 
 			$query = str_replace( array_keys( $replace ), array_values( $replace ), $query );
@@ -108,15 +108,27 @@
 			
 		}
 
-		public function register_table ( $table ) {
+		public function register_table ( $alias, $table = null ) {
 
-			if ( is_array( $table ) ) {
-				foreach ( $table as $t ) {
-					$this->register_table( $t );
+			if ( is_array( $alias ) ) {
+				foreach ( $alias as $a => $t ) {
+
+					// for a numeric array, assume no alias
+					if ( is_numeric( $a ) ) {
+						$a = $t;
+						$t = null;
+					}
+
+					$this->register_table( $a, $t );
 				}
 			}
+
+			// if there is no table, the alias is actually the table name - use it for both
+			if ( $table == null ) {
+				$table = $alias;
+			}
 			
-			$this->tables[ $table ] = $table;
+			$this->tables[ $alias ] = $table;
 
 		}
 		
