@@ -28,7 +28,7 @@
 			// 		2: the LIMIT offset (ie: start)
 			// 		3: the LIMIT row count (ie: stop + 1 )
 
-			$start = $matches[2];
+			$start = $matches[2] + 1;
 			$stop = $start + $matches[3] - 1;
 
 			$query = 'select * from ( select OFFSET_TEMP1.*, rownumber() OVER() as ROW_NUM FROM ( ' . $matches[1] . ' ) AS OFFSET_TEMP1 ) AS OFFSET_TEMP2 where ROW_NUM between ' . $start . ' and ' . $stop;
@@ -48,10 +48,10 @@
 			// pull out our matches, for clarity
 			$query = $matches[1];
 			$order_by = $matches[2];
-			$offset = $matches[3];
+			$offset = $matches[3] + 1;      // increment by one because ROW_NUM is 1-indexed, but LIMIT's offset is 0-indexed
 			$row_count = $matches[4];
 
-			// stop is the raw number of results we want to return, but the BETWEEN we translate into is inclusive, so we need to get one less record
+			// row_count is the raw number of results we want to return, so calculate the high end of that based on the offset. subtract 1 because BETWEEN is *inclusive*
 			$stop = $offset + ( $row_count - 1 );
 
 			// the order by was trimmed from our query, so make sure it gets put back where it belongs
