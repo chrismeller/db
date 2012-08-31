@@ -423,6 +423,18 @@
 			return $this->pdo->rollback();
 			
 		}
+
+		public function set_attribute ( $key, $value ) {
+
+			return $this->pdo->setAttribute( $key, $value );
+
+		}
+
+		public function get_attribute ( $key ) {
+
+			return $this->pdo->getAttribute( $key );
+
+		}
 		
 	}
 
