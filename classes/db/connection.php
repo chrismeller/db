@@ -108,6 +108,14 @@
 			
 		}
 
+		/**
+		 * Register a table alias that will be processed in sql_t().
+		 *
+		 * After registering, you can simply use {alias} in your SQL query, and it will be translated to $table and have the db prefix prepended to it before execution.
+		 *
+		 * @param string|array $alias Either a single alias name, or an array of alias => table values.
+		 * @param string|null $table A table name, or null if it's the same as the alias (in which case the table prefix is simply prepended).
+		 */
 		public function register_table ( $alias, $table = null ) {
 
 			if ( is_array( $alias ) ) {
@@ -174,15 +182,17 @@
 			return $this->exec( $query );
 			
 		}
-		
+
 		/**
-		 * Execute a SQL query, with optional arguments for a prepared statement, and return the statement handle.
-		 * 
-		 * @param string $query The SQL query.
+		 * Execute an SQL query, with optional arguments for a prepared statement, and return the statement handle.
+		 *
+		 * @param $query The SQL query.
 		 * @param array $args An array of bound parameter values. Depending on the naming of parameter variables it could be associative or not.
+		 * @param null $fetch_class The name of the class to return results as.
 		 * @param array $attribs An array of attributes to hand to PDO::prepare().
-		 * @return PDOStatement The prepared PDOStatement.
-		 * @throws PDOException
+		 *
+		 * @return \PDOStatement The prepared PDOStatement.
+		 * @throws \PDOException
 		 */
 		public function query ( $query, $args = array(), $fetch_class = null, $attribs = array() ) {
 			
@@ -236,7 +246,16 @@
 			return $statement;
 			
 		}
-		
+
+		/**
+		 * Prepare a PDOStatement and return it without executing.
+		 *
+		 * @param $query The SQL query.
+		 * @param null $fetch_class The name of the class to fetch results as, after you execute the handle yourself.
+		 * @param array $attribs AN array of attributes to hand to PDO::prepare().
+		 *
+		 * @return \PDOStatement The statement handle.
+		 */
 		public function prepare ( $query, $fetch_class = null, $attribs = array() ) {
 			
 			if ( $fetch_class == null ) {
@@ -276,7 +295,16 @@
 			return $statement;
 			
 		}
-		
+
+		/**
+		 * Execute a query and return an array of all the results.
+		 *
+		 * @param $query The SQL query.
+		 * @param array $args An array of bound parameter values.
+		 * @param null $class The class to return each individual result as.
+		 *
+		 * @return array
+		 */
 		public function get_results ( $query, $args = array(), $class = null ) {
 			
 			$statement = $this->query( $query, $args, $class );
@@ -284,7 +312,16 @@
 			return $statement->fetchAll();
 			
 		}
-		
+
+		/**
+		 * Execute a query and return the first result.
+		 *
+		 * @param $query The SQL query.
+		 * @param array $args An array of bound parameter values.
+		 * @param null $class The class to return the result as.
+		 *
+		 * @return mixed Either your custom $class, or stdClass.
+		 */
 		public function get_row ( $query, $args = array(), $class = null ) {
 			
 			$statement = $this->query( $query, $args, $class );
@@ -292,7 +329,16 @@
 			return $statement->fetch();
 			
 		}
-		
+
+		/**
+		 * Execute a query and return the first column of each result.
+		 *
+		 * @param $query The SQL query.
+		 * @param array $args An array of bound parameter values.
+		 * @param null $class The class to return each result as.
+		 *
+		 * @return array
+		 */
 		public function get_column ( $query, $args = array(), $class = null ) {
 			
 			$statement = $this->query( $query, $args, $class );
@@ -300,7 +346,15 @@
 			return $statement->fetchAll( \PDO::FETCH_COLUMN );
 			
 		}
-		
+
+		/**
+		 * Execute a query and return the first column of the first result.
+		 *
+		 * @param $query The SQL query.
+		 * @param array $args An array of bound parameters.
+		 *
+		 * @return bool|mixed The single value, or false if there isn't one.
+		 */
 		public function get_value ( $query, $args = array() ) {
 			
 			$statement = $this->query( $query, $args );
@@ -424,12 +478,31 @@
 			
 		}
 
+		/**
+		 * Set a PDO attribute on the current connection.
+		 *
+		 * @param $key Attribute key.
+		 * @param $value Attribute value.
+		 *
+		 * @return mixed The result of PDO::setAttribute().
+		 *
+		 * @see http://php.net/pdo.setattribute
+		 */
 		public function set_attribute ( $key, $value ) {
 
 			return $this->pdo->setAttribute( $key, $value );
 
 		}
 
+		/**
+		 * Get a PDO attribute for the current connection.
+		 *
+		 * @param $key Attribute key.
+		 *
+		 * @return mixed The result of PDO::getAttribute().
+		 *
+		 * @see http://php.net/pdo.getattribute
+		 */
 		public function get_attribute ( $key ) {
 
 			return $this->pdo->getAttribute( $key );
