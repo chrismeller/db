@@ -28,7 +28,15 @@
 			}
 			
 			$class = 'DB\DB_Connection_' . $config['type'];
-			
+
+			// try to load the class ahead of time
+			$loaded = \Fuel\Core\Autoloader::load( $class );
+
+			if ( !$loaded ) {
+				// fall back to the generic connection if we couldn't load the driver-specific one
+				$class = 'DB\DB_Connection';
+			}
+
 			// create the instance
 			$instance = new $class( $name, $config );
 			

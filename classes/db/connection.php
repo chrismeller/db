@@ -2,7 +2,7 @@
 
 	namespace DB;
 
-	abstract class DB_Connection {
+	class DB_Connection {
 		
 		protected $pdo;
 		protected $statements = array();
